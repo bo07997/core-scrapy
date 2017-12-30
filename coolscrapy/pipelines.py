@@ -21,33 +21,104 @@ from scrapy.exceptions import DropItem
 from sqlalchemy.orm import sessionmaker
 from coolscrapy.models import News, db_connect, create_news_table, Article, Tobacco, Barcode
 import re
+import json
 Redis = redis.StrictRedis(host='localhost', port=6379, db=0)
 _log = logging.getLogger(__name__)
 
 
 class Myspider_space_Pipeline(object):
-    """auther去除空格 """
+    """author去除空格 redis"""
     def process_item(self, item, spider):
+        if spider.name != "mySpider_search":
+            return item
         try:
-            auther = item.get('book_auther', False)
-            if auther is not False:
-                temp_auther = re.findall("\\n(.*?)\\r", auther)[0].strip()
-                item['book_auther'] = temp_auther
+            author = item.get('book_author', False)
+            if author is not False:
+                temp_auther = re.findall("\\n(.*?)\\r", author)[0].strip()
+                item['book_author'] = temp_auther
         except Exception as err:
-            _log.error('Myspider_space_Pipeline ERROR 【' + str(err) + "】")
+            _log.error('mySpider_space_Pipeline ERROR 【' + str(err) + "】")
+        item_json = json.dumps(item._values, ensure_ascii=False)
+        Redis.set(spider.search_book_name + spider.p, item_json)
         return item
 
-class Myspider_db_Pipeline(object):
-    """数据库操作"""
+
+class Myspider_db_search_Pipeline(object):
+    """数据库操作 search 表"""
     def process_item(self, item, spider):
+
+        if spider.name != "mySpider_search":
+            return item
+
         try:
-            auther = item.get('book_auther', False)
-            if auther is not False:
-                temp_auther = re.findall("\\n(.*?)\\r", auther)[0].strip()
-                item['book_auther'] = temp_auther
+            author = item.get('book_author', False)
+            if author is not False:
+                temp_auther = re.findall("\\n(.*?)\\r", author)[0].strip()
+                item['book_author'] = temp_auther
         except Exception as err:
-            _log.error('Myspider_db_Pipeline ERROR 【' + str(err) + "】")
+            _log.error('mySpider_db_Pipeline ERROR 【' + str(err) + "】")
         return item
+
+
+class Myspider_db_chapter_Pipeline(object):
+    """数据库操作 chapter 表"""
+    def process_item(self, item, spider):
+        if spider.name != "mySpider_book_chapter":
+            return item
+        try:
+            author = item.get('book_author', False)
+            if author is not False:
+                temp_author = re.findall("\\n(.*?)\\r", author)[0].strip()
+                item['book_author'] = temp_author
+        except Exception as err:
+            _log.error('mySpider_db_Pipeline ERROR 【' + str(err) + "】")
+        return item
+
+class Myspider_db_content_Pipeline(object):
+    """数据库操作 content 表"""
+    def process_item(self, item, spider):
+        if spider.name != "mySpider_book_content":
+            return item
+        try:
+            author = item.get('book_author', False)
+            if author is not False:
+                temp_author = re.findall("\\n(.*?)\\r", author)[0].strip()
+                item['book_author'] = temp_author
+        except Exception as err:
+            _log.error('mySpider_db_Pipeline ERROR 【' + str(err) + "】")
+        return item
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class DuplicatesPipeline(object):
     """Item去重复"""

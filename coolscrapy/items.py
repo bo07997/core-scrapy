@@ -8,8 +8,9 @@
 import scrapy
 
 class Book(scrapy.Item):
+    book_id = scrapy.Field()
     book_name = scrapy.Field()
-    book_auther = scrapy.Field()
+    book_author = scrapy.Field()
     book_url = scrapy.Field()
     book_ins = scrapy.Field()
     book_type = scrapy.Field()
@@ -17,6 +18,75 @@ class Book(scrapy.Item):
     book_piture = scrapy.Field()
     book_schedule = scrapy.Field()
     book_time = scrapy.Field()
+
+
+class Book_chapter(scrapy.Item):
+    book_id = scrapy.Field()
+    chapter_id = scrapy.Field()
+    chapter_name = scrapy.Field()
+    chapter_url = scrapy.Field()
+
+
+class Chapter_content(scrapy.Item):
+    content_id = scrapy.Field()
+    chapter_id = scrapy.Field()
+    chapter_content = scrapy.Field()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class Article(scrapy.Item):
     title = scrapy.Field()

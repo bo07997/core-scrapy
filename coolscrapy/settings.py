@@ -22,7 +22,9 @@ ITEM_PIPELINES = {
     # 'coolscrapy.pipelines.JsonExportPipeline': 4,
     # 'coolscrapy.pipelines.ArticleDataBasePipeline': 5,
     'coolscrapy.pipelines.Myspider_space_Pipeline': 6,
-    #'coolscrapy.pipelines.Myspider_db_Pipeline': 7,
+    'coolscrapy.pipelines.Myspider_db_search_Pipeline': 7,
+    'coolscrapy.pipelines.Myspider_db_chapter_Pipeline': 8,
+    'coolscrapy.pipelines.Myspider_db_content_Pipeline': 8,
 }
 DOWNLOADER_MIDDLEWARES = {
     # 这里是下载中间件

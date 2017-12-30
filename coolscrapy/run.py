@@ -6,14 +6,16 @@ Desc :
 """
 
 import logging
-from twisted.internet import reactor
+
 from scrapy.crawler import CrawlerRunner
-from scrapy.utils.project import get_project_settings
 from scrapy.utils.log import configure_logging
-from coolscrapy.models import db_connect
-from coolscrapy.models import ArticleRule
+from scrapy.utils.project import get_project_settings
 from sqlalchemy.orm import sessionmaker
-from coolscrapy.spiders.article_spider import ArticleSpider
+from twisted.internet import reactor
+
+from coolscrapy.models import ArticleRule
+from coolscrapy.models import db_connect
+from coolscrapy.spiders.others.article_spider import ArticleSpider
 
 if __name__ == '__main__':
     settings = get_project_settings()
