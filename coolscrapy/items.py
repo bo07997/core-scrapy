@@ -7,6 +7,16 @@
 
 import scrapy
 
+class Book(scrapy.Item):
+    book_name = scrapy.Field()
+    book_auther = scrapy.Field()
+    book_url = scrapy.Field()
+    book_ins = scrapy.Field()
+    book_type = scrapy.Field()
+    book_word_count = scrapy.Field()
+    book_piture = scrapy.Field()
+    book_schedule = scrapy.Field()
+    book_time = scrapy.Field()
 
 class Article(scrapy.Item):
     title = scrapy.Field()

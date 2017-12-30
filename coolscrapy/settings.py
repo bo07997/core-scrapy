@@ -21,8 +21,8 @@ ITEM_PIPELINES = {
     # 'coolscrapy.pipelines.JsonWriterPipeline': 3,
     # 'coolscrapy.pipelines.JsonExportPipeline': 4,
     # 'coolscrapy.pipelines.ArticleDataBasePipeline': 5,
-    'coolscrapy.pipelines.TobaccoImagePipeline': 6,
-    'coolscrapy.pipelines.TobaccoDatabasePipeline': 7,
+    'coolscrapy.pipelines.Myspider_space_Pipeline': 6,
+    #'coolscrapy.pipelines.Myspider_db_Pipeline': 7,
 }
 DOWNLOADER_MIDDLEWARES = {
     # 这里是下载中间件
@@ -53,11 +53,11 @@ LOG_FORMAT = "%(asctime)s [%(name)s] %(levelname)s: %(message)s"
 # windows pip install mysqlclient
 # linux pip install MySQL-python
 DATABASE = {'drivername': 'mysql',
-            'host': '123.207.66.156',
+            'host': '192.168.58.128',
             'port': '3306',
             'username': 'root',
-            'password': '******',
-            'database': 'test',
+            'password': '12315',
+            'database': 'crawler',
             'query': {'charset': 'utf8'}}
 
 # 图片下载设置

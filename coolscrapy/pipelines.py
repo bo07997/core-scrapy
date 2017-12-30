@@ -20,10 +20,34 @@ from scrapy.pipelines.images import ImagesPipeline
 from scrapy.exceptions import DropItem
 from sqlalchemy.orm import sessionmaker
 from coolscrapy.models import News, db_connect, create_news_table, Article, Tobacco, Barcode
-
+import re
 Redis = redis.StrictRedis(host='localhost', port=6379, db=0)
 _log = logging.getLogger(__name__)
 
+
+class Myspider_space_Pipeline(object):
+    """auther去除空格 """
+    def process_item(self, item, spider):
+        try:
+            auther = item.get('book_auther', False)
+            if auther is not False:
+                temp_auther = re.findall("\\n(.*?)\\r", auther)[0].strip()
+                item['book_auther'] = temp_auther
+        except Exception as err:
+            _log.error('Myspider_space_Pipeline ERROR 【' + str(err) + "】")
+        return item
+
+class Myspider_db_Pipeline(object):
+    """数据库操作"""
+    def process_item(self, item, spider):
+        try:
+            auther = item.get('book_auther', False)
+            if auther is not False:
+                temp_auther = re.findall("\\n(.*?)\\r", auther)[0].strip()
+                item['book_auther'] = temp_auther
+        except Exception as err:
+            _log.error('Myspider_db_Pipeline ERROR 【' + str(err) + "】")
+        return item
 
 class DuplicatesPipeline(object):
     """Item去重复"""
