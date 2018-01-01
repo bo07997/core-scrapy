@@ -10,6 +10,7 @@ import logging
 import time
 import json
 import threading
+import os
 from time import ctime,sleep
 define("port", default=8000, help="run on the given port", type=int)
 Redis = redis.StrictRedis(host='localhost', port=6379, db=0)
@@ -41,7 +42,7 @@ class searchHandler(tornado.web.RequestHandler):
         while(time.time() - start_time < 100):
             if Redis.exists(book_name + "-" + p):
                 value = json.loads(Redis.get(book_name + "-" + p))
-                self.render("index.html")
+
                 break
             else:
                 time.sleep(0.5)
@@ -55,10 +56,13 @@ class ChapterHandler(tornado.web.RequestHandler):
 
 
 class IndexHandler(tornado.web.RequestHandler):
-    def post(self):
-        text = self.get_argument('text')
-        width = self.get_argument('width', 40)
-        self.write(textwrap.fill(text, int(width)))
+    def get(self):
+        self.render("index.html")
+
+
+class MyFile(tornado.web.StaticFileHandler):
+    def set_extra_headers(self, path):
+        self.set_header("Cache-control", "no-cache")
 
 
 class Application(tornado.web.Application):
@@ -66,11 +70,15 @@ class Application(tornado.web.Application):
         handlers = [
             (r"/search", searchHandler),
             (r"/chapter", ChapterHandler),
-            (r"/", IndexHandler)
+            (r"/", IndexHandler),
         ]
 
+        statics_path = os.path.join(os.path.dirname(__file__), "templates")
+
         settings = {
-            'template_path': 'templates'
+            'template_path': 'templates',
+            'statics_path':'templates',
+
         }
         tornado.web.Application.__init__(self, handlers, **settings)
 
