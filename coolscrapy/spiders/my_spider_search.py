@@ -4,7 +4,12 @@ from scrapy import Request
 
 from scrapy.spiders import CrawlSpider, Rule, Spider
 from coolscrapy.items import Book
-
+import logging
+import  json
+import re
+import redis
+Redis = redis.StrictRedis(host='localhost', port=6379, db=0)
+_log = logging.getLogger(__name__)
 
 class TobaccoSpider(Spider):
     """
@@ -42,5 +47,20 @@ class TobaccoSpider(Spider):
             book['book_piture'] = each_row.xpath("div[1]/a/img/@src").extract_first()
             book['book_schedule'] = each_row.xpath("div[2]/div/p[4]/span[2]/text()").extract_first()
             books.append(book)
-        return books
+        #去除空格并且存入redis
+        self.space_redis(books)
+        # return books
 
+    def space_redis(self, items):
+        list = []
+        try:
+            for item in items:
+                author = item._values.get('book_author', False)
+                if author is not False:
+                    temp_auther = re.findall("\\n(.*?)\\r", author)[0].strip()
+                    item._values['book_author'] = temp_auther
+                    list.append(item._values)
+        except Exception as err:
+            _log.error('mySpider_space_Pipeline ERROR 【' + str(err) + "】")
+        item_json = json.dumps(list, ensure_ascii=False)
+        Redis.set(self.search_book_name + "-" + self.p, item_json)

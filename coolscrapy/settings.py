@@ -14,30 +14,30 @@ BOT_NAME = 'coolscrapy'
 
 SPIDER_MODULES = ['coolscrapy.spiders']
 NEWSPIDER_MODULE = 'coolscrapy.spiders'
-
-ITEM_PIPELINES = {
-    # 'coolscrapy.pipelines.DuplicatesPipeline': 1,
-    # 'coolscrapy.pipelines.FilterWordsPipeline': 2,
-    # 'coolscrapy.pipelines.JsonWriterPipeline': 3,
-    # 'coolscrapy.pipelines.JsonExportPipeline': 4,
-    # 'coolscrapy.pipelines.ArticleDataBasePipeline': 5,
-    'coolscrapy.pipelines.Myspider_space_Pipeline': 6,
-    'coolscrapy.pipelines.Myspider_db_search_Pipeline': 7,
-    'coolscrapy.pipelines.Myspider_db_chapter_Pipeline': 8,
-    'coolscrapy.pipelines.Myspider_db_content_Pipeline': 8,
-}
-DOWNLOADER_MIDDLEWARES = {
-    # 这里是下载中间件
-    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
-    'coolscrapy.middlewares.RotateUserAgentMiddleware': 400,
-    'scrapy_splash.SplashCookiesMiddleware': 723,
-    'scrapy_splash.SplashMiddleware': 725,
-    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
-}
-SPIDER_MIDDLEWARES = {
-    # 这是爬虫中间件， 543是运行的优先级
-    # 'coolscrapy.middlewares.UrlUniqueMiddleware': 543,
-}
+#
+# ITEM_PIPELINES = {
+#     # 'coolscrapy.pipelines.DuplicatesPipeline': 1,
+#     # 'coolscrapy.pipelines.FilterWordsPipeline': 2,
+#     # 'coolscrapy.pipelines.JsonWriterPipeline': 3,
+#     # 'coolscrapy.pipelines.JsonExportPipeline': 4,
+#     # 'coolscrapy.pipelines.ArticleDataBasePipeline': 5,
+#     # 'coolscrapy.pipelines.Myspider_space_Pipeline': 6,
+#     # 'coolscrapy.pipelines.Myspider_db_search_Pipeline': 7,
+#     # 'coolscrapy.pipelines.Myspider_db_chapter_Pipeline': 8,
+#     # 'coolscrapy.pipelines.Myspider_db_content_Pipeline': 8,
+# }
+# DOWNLOADER_MIDDLEWARES = {
+#     # 这里是下载中间件
+#     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+#     'coolscrapy.middlewares.RotateUserAgentMiddleware': 400,
+#     'scrapy_splash.SplashCookiesMiddleware': 723,
+#     'scrapy_splash.SplashMiddleware': 725,
+#     'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+# }
+# SPIDER_MIDDLEWARES = {
+#     # 这是爬虫中间件， 543是运行的优先级
+#     # 'coolscrapy.middlewares.UrlUniqueMiddleware': 543,
+# }
 
 # 几个反正被Ban的策略设置
 DOWNLOAD_TIMEOUT = 20

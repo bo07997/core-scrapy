@@ -39,6 +39,7 @@ class Myspider_space_Pipeline(object):
         except Exception as err:
             _log.error('mySpider_space_Pipeline ERROR 【' + str(err) + "】")
         item_json = json.dumps(item._values, ensure_ascii=False)
+        value = json.loads(item_json)
         Redis.set(spider.search_book_name + spider.p, item_json)
         return item
 
