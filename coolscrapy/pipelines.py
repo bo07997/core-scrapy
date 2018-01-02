@@ -29,7 +29,7 @@ _log = logging.getLogger(__name__)
 class Myspider_space_Pipeline(object):
     """author去除空格 redis"""
     def process_item(self, item, spider):
-        if spider.name != "mySpider_search":
+        if spider.name != "mySpider_search???":
             return item
         try:
             author = item.get('book_author', False)

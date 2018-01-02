@@ -19,35 +19,31 @@ _log = logging.getLogger(__name__)
 
 class searchHandler(tornado.web.RequestHandler):
 
-    def craw(self):
-        book_name = "斗破苍穹"
-        p = "1"
-        cmd = 'scrapy crawl mySpider_search -a p={0} -a search_book_name={1}'.format(p, book_name)
+    def craw(self, search_name, p):
+        cmd = 'scrapy crawl mySpider_search -a p={0} -a search_book_name={1}'.format(p, search_name)
         try:
             cmdline.execute(cmd.split())
         except Exception as err:
             _log.error(err)
             return
     def get(self):
-
-        crawler_name = 'mySpider_search'
-
-        book_name = "斗破苍穹"
-        p = "1"
-        thread_craw = threading.Thread(self.craw())
+        search_name = self.get_argument('name', '')
+        p = self.get_argument('p', '1')
+        thread_craw = threading.Thread(self.craw(search_name, p))
         thread_craw.setDaemon(True)
         thread_craw.start()
-
         start_time = time.time()
-        while(time.time() - start_time < 100):
-            if Redis.exists(book_name + "-" + p):
-                value = json.loads(Redis.get(book_name + "-" + p))
-
+        while(True):
+            if Redis.exists(search_name + "-" + p):
+                value = json.loads(Redis.get(search_name + "-" + p))
+                self.render("search_result.html", books=value)
                 break
             else:
                 time.sleep(0.5)
-        else:
-            print("Oh NO, time out!")
+            if time.time() - start_time > 25:
+                _log.info("Oh NO, time out!")
+                break
+
 
 
 class ChapterHandler(tornado.web.RequestHandler):
@@ -73,11 +69,10 @@ class Application(tornado.web.Application):
             (r"/", IndexHandler),
         ]
 
-        statics_path = os.path.join(os.path.dirname(__file__), "templates")
 
         settings = {
             'template_path': 'templates',
-            'statics_path':'templates',
+            "static_path": os.path.join(os.path.dirname(__file__), "templates"),
 
         }
         tornado.web.Application.__init__(self, handlers, **settings)

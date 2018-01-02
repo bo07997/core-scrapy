@@ -26,6 +26,7 @@ class TobaccoSpider(Spider):
 
     def __init__(self, search_book_name=None, p=1, *args, **kwargs):
         if search_book_name is not None:
+            self.start_urls = []
             self.start_urls.append(self.base_url + search_book_name + "&p=" + p)
             self.p = p
             self.search_book_name = search_book_name
@@ -53,14 +54,16 @@ class TobaccoSpider(Spider):
 
     def space_redis(self, items):
         list = []
-        try:
-            for item in items:
-                author = item._values.get('book_author', False)
-                if author is not False:
+        for item in items:
+            author = item._values.get('book_author', False)
+            if author is not False:
+                try:
                     temp_auther = re.findall("\\n(.*?)\\r", author)[0].strip()
                     item._values['book_author'] = temp_auther
                     list.append(item._values)
-        except Exception as err:
-            _log.error('mySpider_space_Pipeline ERROR 【' + str(err) + "】")
+                except Exception as err:
+                    _log.error('mySpider_space_Pipeline ERROR 【' + str(err) + "】")
+                    continue
+
         item_json = json.dumps(list, ensure_ascii=False)
         Redis.set(self.search_book_name + "-" + self.p, item_json)
